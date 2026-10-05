@@ -1,6 +1,6 @@
 [package]
 name = "openlex"
-version = "0.1.0"
+version = "0.1.1"
 description = "OpenLex — aide libre à la lecture et à l'écriture"
 authors = ["NORD LABS"]
 license = "GPL-3.0-only"

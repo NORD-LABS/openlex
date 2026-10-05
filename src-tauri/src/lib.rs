@@ -48,13 +48,13 @@ async fn inserer(mot: String, app: AppHandle) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     let _ = app.hide();
     thread::sleep(Duration::from_millis(250));
-    let resultat = pont::coller(&format!("{mot} "));
+    let resultat = pont::coller(&app, &format!("{mot} "));
     let _ = fenetre.show();
     resultat
 }
 
 fn lire_selection(app: &AppHandle) {
-    match pont::lire_selection() {
+    match pont::lire_selection(app) {
         Ok(texte) => {
             let phrases = voix::decouper_phrases(&texte);
             app.state::<Voix>().parler(phrases.clone());
