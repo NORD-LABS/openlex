@@ -105,6 +105,10 @@ pub fn phonetiser(texte: &str) -> Vec<u8> {
                 {
                     out.push(b'E');
                     1
+                } else if i == 0 {
+                    // en début de mot, « e » se prononce presque toujours é (ecole, elefan)
+                    out.push(b'e');
+                    1
                 } else {
                     out.push(SCHWA);
                     1
@@ -456,6 +460,8 @@ mod tests {
             ("sizo", "sizo"),
             ("jiraf", "ZiRaf"),
             ("gato", "gato"),
+            ("elefan", "el°f@"),
+            ("ecol", "ekol"),
             ("oto", "oto"),
         ]);
     }

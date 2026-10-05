@@ -19,11 +19,19 @@ pub struct Suggestion {
 const PLEIN: u16 = 2;
 const DEMI: u16 = 1;
 
+/// Voyelles que la plupart des élèves (et des accents québécois) ne distinguent pas :
+/// les confondre ne coûte rien.
+fn equivalent(a: u8, b: u8) -> bool {
+    matches!(
+        (a, b),
+        (b'e', b'E') | (b'E', b'e') | (b'o', b'O') | (b'O', b'o') | (b'2', b'9') | (b'9', b'2')
+    )
+}
+
 fn groupe(p: u8) -> u8 {
     match p {
-        b'e' | b'E' => 1,
+        b'e' | b'E' | b'2' | b'9' | SCHWA => 1,
         b'o' | b'O' => 2,
-        b'2' | b'9' | SCHWA => 3,
         b'5' | b'1' => 4,
         b'i' | b'j' => 5,
         b'u' | b'w' => 6,
@@ -35,7 +43,7 @@ fn groupe(p: u8) -> u8 {
 }
 
 fn cout_substitution(a: u8, b: u8) -> u16 {
-    if a == b {
+    if a == b || equivalent(a, b) {
         0
     } else if groupe(a) != 0 && groupe(a) == groupe(b) {
         DEMI
@@ -173,6 +181,9 @@ mod tests {
         dans_top("ojourdui", "aujourd'hui", 3);
         dans_top("wazo", "oiseau", 3);
         dans_top("sizo", "ciseaux", 3);
+        dans_top("elefan", "éléphant", 3);
+        dans_top("ecol", "école", 3);
+        dans_top("pome", "pomme", 1);
     }
 
     #[test]
@@ -190,7 +201,8 @@ mod tests {
     fn distance_ponderee() {
         let mut l = Vec::new();
         assert_eq!(distance(b"oto", b"oto", 4, &mut l), Some(0));
-        assert_eq!(distance(b"@koR", b"@kOR", 4, &mut l), Some(DEMI));
+        assert_eq!(distance(b"@koR", b"@kOR", 4, &mut l), Some(0));
+        assert_eq!(distance(b"*l*f@", b"elef@", 4, &mut l), Some(2 * DEMI));
         assert_eq!(distance(b"fami", b"famij", 4, &mut l), Some(PLEIN));
         assert_eq!(distance(b"abc", b"xyz", 2, &mut l), None);
     }
