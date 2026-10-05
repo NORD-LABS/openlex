@@ -37,7 +37,7 @@ Cocher chaque tâche quand elle est vérifiée. Commit après chaque tâche.
   `npm run build`, `npm run tauri build` (macOS local). README FR (but, captures facultatives,
   installation, raccourcis, vie privée, licences, crédits Lexique, « code majoritairement
   généré par agents IA »).
-- [ ] **T10 CI** — `.github/workflows/ci.yml` (tests sur ubuntu) et `release.yml`
+- [x] **T10 CI** — `.github/workflows/ci.yml` (tests sur ubuntu) et `release.yml`
   (`tauri-apps/tauri-action`, windows-latest + macos-latest, sur tag `v*`, release brouillon
   → publiée).
 - [ ] **T11 Publication** — `gh repo create NORD-LABS/openlex --public`, push `main`,
