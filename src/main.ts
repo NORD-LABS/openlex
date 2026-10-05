@@ -98,5 +98,21 @@ api.surVoix((e) => {
   }
 });
 
+const auto = $<HTMLInputElement>("auto");
+const autoErreur = $<HTMLParagraphElement>("auto-erreur");
+function montrerErreurAuto(m: string | null) {
+  autoErreur.textContent = m ?? "";
+  autoErreur.hidden = !m;
+}
+auto.onchange = () => api.autoActiver(auto.checked);
+api.autoEtat().then((e) => {
+  if (e.erreur) {
+    auto.checked = false;
+    auto.disabled = true;
+    montrerErreurAuto(e.erreur);
+  }
+});
+api.surErreurAuto(montrerErreurAuto);
+
 if (api.estMac) $("raccourci").textContent = "⌘";
 saisie.focus();

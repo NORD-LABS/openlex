@@ -1,0 +1,58 @@
+:root {
+  font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+#bulle {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(22, 23, 27, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.choix {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #f2f2f5;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.choix:first-child {
+  background: rgba(127, 176, 255, 0.22);
+}
+
+kbd {
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #ffd84d;
+  color: #1b1b1f;
+  font-weight: 700;
+}

@@ -43,3 +43,16 @@ export function surSelection(rappel: (phrases: string[]) => void): void {
 }
 
 export const estMac = navigator.userAgent.includes("Mac");
+
+export async function autoEtat(): Promise<{ erreur: string | null }> {
+  if (dansTauri) return invoke("auto_etat");
+  return { erreur: null };
+}
+
+export async function autoActiver(actif: boolean): Promise<void> {
+  if (dansTauri) await invoke("auto_activer", { actif });
+}
+
+export function surErreurAuto(rappel: (message: string) => void): void {
+  if (dansTauri) listen<string>("auto-erreur", (e) => rappel(e.payload));
+}

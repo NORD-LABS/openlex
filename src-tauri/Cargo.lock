@@ -2431,17 +2431,21 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "openlex"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "arboard",
+ "core-foundation 0.10.1",
+ "core-graphics",
  "enigo",
  "flate2",
+ "foreign-types",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
  "tauri-plugin-global-shortcut",
  "tts",
+ "windows 0.61.3",
 ]
 
 [[package]]

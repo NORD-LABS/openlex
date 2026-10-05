@@ -194,3 +194,30 @@ kbd {
 #message.erreur {
   color: var(--erreur);
 }
+
+.interrupteur {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.interrupteur input {
+  width: 22px;
+  height: 22px;
+  margin-top: 3px;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.interrupteur > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.erreur {
+  color: var(--erreur);
+  margin: 0;
+  font-size: 0.9rem;
+}

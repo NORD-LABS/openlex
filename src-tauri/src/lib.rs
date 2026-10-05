@@ -1,9 +1,13 @@
+pub mod auto;
+mod clavier;
 pub mod lexique;
 pub mod phonetiseur;
 pub mod pont;
 pub mod predicteur;
+pub mod saisie;
 pub mod voix;
 
+use std::sync::Mutex;
 use std::thread;
 use std::time::Duration;
 
@@ -11,6 +15,7 @@ use serde::Serialize;
 use tauri::{AppHandle, Emitter, Manager, State};
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 
+use auto::Auto;
 use lexique::Lexique;
 use predicteur::Suggestion;
 use voix::Voix;
@@ -18,6 +23,26 @@ use voix::Voix;
 #[derive(Clone, Serialize)]
 struct Lecture {
     phrases: Vec<String>,
+}
+
+/// Erreur de démarrage de l'écoute du clavier (permission refusée…), pour l'interface.
+struct ErreurAuto(Mutex<Option<String>>);
+
+#[derive(Serialize)]
+struct EtatAuto {
+    erreur: Option<String>,
+}
+
+#[tauri::command]
+fn auto_etat(erreur: State<ErreurAuto>) -> EtatAuto {
+    EtatAuto {
+        erreur: erreur.0.lock().ok().and_then(|e| e.clone()),
+    }
+}
+
+#[tauri::command]
+fn auto_activer(actif: bool, auto: State<Auto>) {
+    auto.activer(actif);
 }
 
 #[tauri::command]
@@ -73,20 +98,30 @@ pub fn run() {
     #[cfg(not(target_os = "macos"))]
     let modificateurs = Modifiers::CONTROL | Modifiers::SHIFT;
     let raccourci_lire = Shortcut::new(Some(modificateurs), Code::KeyL);
+    let choix = auto::raccourcis_choix();
 
     tauri::Builder::default()
         .plugin(
             tauri_plugin_global_shortcut::Builder::new()
                 .with_handler(move |app, raccourci, evenement| {
-                    if raccourci == &raccourci_lire && evenement.state() == ShortcutState::Pressed {
+                    if evenement.state() != ShortcutState::Pressed {
+                        return;
+                    }
+                    if raccourci == &raccourci_lire {
                         let app = app.clone();
                         thread::spawn(move || lire_selection(&app));
+                    } else if let Some(i) = choix.iter().position(|c| c == raccourci) {
+                        app.state::<Auto>().choisir(i);
                     }
                 })
                 .build(),
         )
         .setup(move |app| {
             app.manage(Voix::demarrer(app.handle().clone()));
+            let auto = Auto::demarrer(app.handle().clone());
+            let erreur = auto.ecouter().err();
+            app.manage(auto);
+            app.manage(ErreurAuto(Mutex::new(erreur)));
             // Décompresse le lexique tout de suite pour que la première suggestion soit rapide.
             thread::spawn(|| {
                 Lexique::global();
@@ -96,7 +131,14 @@ pub fn run() {
             }
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![suggerer, lire, arreter, inserer])
+        .invoke_handler(tauri::generate_handler![
+            suggerer,
+            lire,
+            arreter,
+            inserer,
+            auto_etat,
+            auto_activer
+        ])
         .run(tauri::generate_context!())
         .expect("erreur au lancement d'OpenLex");
 }
