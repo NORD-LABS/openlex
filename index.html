@@ -1,43 +1,51 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri App</title>
+    <title>OpenLex</title>
+    <link rel="stylesheet" href="/src/styles.css" />
     <script type="module" src="/src/main.ts" defer></script>
   </head>
 
   <body>
-    <main class="container">
-      <h1>Welcome to Tauri</h1>
+    <main>
+      <header>
+        <h1>OpenLex</h1>
+        <p class="sous-titre">Aide libre pour lire et écrire</p>
+      </header>
 
-      <div class="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/src/assets/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img
-            src="/src/assets/tauri.svg"
-            class="logo tauri"
-            alt="Tauri logo"
-          />
-        </a>
-        <a href="https://www.typescriptlang.org/docs" target="_blank">
-          <img
-            src="/src/assets/typescript.svg"
-            class="logo typescript"
-            alt="typescript logo"
-          />
-        </a>
-      </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
+      <section aria-labelledby="titre-mot">
+        <h2 id="titre-mot">Trouver un mot</h2>
+        <label for="saisie" class="aide">Écris le mot comme tu l'entends</label>
+        <input
+          id="saisie"
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="ex. : fotografi"
+        />
+        <ol id="suggestions" aria-live="polite"></ol>
+        <p class="astuce">Clique sur un mot (ou tape son chiffre) pour l'écrire dans ton texte.</p>
+      </section>
 
-      <form class="row" id="greet-form">
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greet-msg"></p>
+      <section aria-labelledby="titre-lire">
+        <h2 id="titre-lire">Lire à voix haute</h2>
+        <textarea
+          id="texte"
+          rows="4"
+          placeholder="Colle ton texte ici… ou sélectionne du texte dans Word ou Docs et fais le raccourci."
+        ></textarea>
+        <div id="lecture" hidden></div>
+        <div class="boutons">
+          <button id="lire" type="button">🔊 Lire</button>
+          <button id="arreter" type="button" class="secondaire">⏹ Arrêter</button>
+        </div>
+        <p class="astuce">Raccourci partout : <kbd id="raccourci">Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>L</kbd></p>
+      </section>
+
+      <p id="message" role="status" aria-live="polite"></p>
     </main>
   </body>
 </html>
