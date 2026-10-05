@@ -40,6 +40,6 @@ Cocher chaque tâche quand elle est vérifiée. Commit après chaque tâche.
 - [x] **T10 CI** — `.github/workflows/ci.yml` (tests sur ubuntu) et `release.yml`
   (`tauri-apps/tauri-action`, windows-latest + macos-latest, sur tag `v*`, release brouillon
   → publiée).
-- [ ] **T11 Publication** — `gh repo create NORD-LABS/openlex --public`, push `main`,
+- [x] **T11 Publication** — `gh repo create NORD-LABS/openlex --public`, push `main`,
   tag `v0.1.0`, vérifier que le workflow release passe ; corriger jusqu'au vert ; publier la
   release. Notifier Théo.
